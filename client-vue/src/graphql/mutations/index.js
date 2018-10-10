@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
-export const UPDATE_LOCATION = gql`
-  mutation updateLocation($id: Int!, $description: String!) {
-    updateLocation(id: $id, description: $description) {
+export const ADD_LOCATION = gql`
+  mutation addLocation($name: String!, $description: String, $coords: CoordsInput) {
+    addLocation(name: $name, description: $description, coords: $coords) {
       id
       name
       description
@@ -14,9 +14,17 @@ export const UPDATE_LOCATION = gql`
   }
 `;
 
-export const ADD_NEW_LOCATION = gql`
-  mutation addNewLocation($name: String!, $description: String, $coords: CoordsInput) {
-    addNewLocation(name: $name, description: $description, coords: $coords) {
+export const REMOVE_LOCATION = gql`
+  mutation removeLocation($id: Int!) {
+    removeLocation(id: $id) {
+      id
+    }
+  }
+`;
+
+export const UPDATE_LOCATION = gql`
+  mutation updateLocation($id: Int!, $description: String!) {
+    updateLocation(id: $id, description: $description) {
       id
       name
       description

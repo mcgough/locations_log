@@ -1,35 +1,19 @@
 <script>
 export default {
-  name: 'Location',
+  name: 'location',
   props: {
     location: { type: Object, default: () => {}},
-    showDetails: { type: Boolean, default: false },
-  },
-  methods: {
-    genDetails() {
-      return this.showDetails
-        ? <div>
-            <textarea ref="description" value={this.location.description} />
-            <div>
-              <button
-                onClick={() => this.$emit('saveClicked', {
-                  id: this.location.id,
-                  description: this.$refs.description.value,
-                })}>
-                Save
-              </button>
-            </div>
-          </div>
-        : null;
-    },
   },
   render(h) {
     return (
       <div class={'location'}>
-        <div class={'name'} onClick={() => this.$emit('click', this.location.id)}>
+        <div class={'name'}
+          onClick={() => this.$emit('click', this.location.id)}>
           {this.location.name}
         </div>
-        {this.genDetails()}
+        <div class={'remove'}
+          onClick={() => this.$emit('remove')}>X</div>
+        {this.$slots.default} 
       </div>
     );
   },
@@ -38,10 +22,16 @@ export default {
 
 <style scroped>
 .location {
+  position: relative;
   border-bottom: 1px solid;
   padding: 1rem 0;
 }
 .name {
   font-size: 1.5rem;
+}
+.remove {
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
 </style>

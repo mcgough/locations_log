@@ -15,18 +15,24 @@ const updateLocation = ({ id, description }) => {
     })
     .filter(l => l.id === id)[0];
 };
-const addNewLocation = (location) => {
+const addLocation = (location) => {
   fakeDB.locations.push(Object.assign(location, {
     id: fakeDB.locations.length + 1,
   }));
   return fakeDB.locations[fakeDB.locations.length - 1];
+};
+const removeLocation = ({ id }) => {
+  const [removed] = fakeDB.locations.filter(l => l.id === id);
+  fakeDB.locations = fakeDB.locations.filter(l => l.id !== id);
+  return removed;
 };
 
 const resolvers = {
   location,
   locations,
   updateLocation,
-  addNewLocation,
+  addLocation,
+  removeLocation,
 };
 
 module.exports = resolvers;

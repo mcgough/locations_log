@@ -10,7 +10,8 @@ const Queries = `
 const Mutations = `
   type Mutation {
     updateLocation(id: Int!, description: String!): Location
-    addNewLocation(name: String, description: String, coords: CoordsInput): Location
+    addLocation(name: String, description: String, coords: CoordsInput): Location
+    removeLocation(id: Int!): Location
 }
 `;
 

@@ -10,28 +10,51 @@ export default {
   data() {
     return {
       map: null,
-      mapMarkers: null,
+      mapMarkers: [],
     }
   },
   async mounted() {
     await this.loadScript();
     this.mapInit();
-    console.log('firing')
+  },
+  watch: {
+    locations(arr) {
+      if (arr.length && this.map) {
+        this.deleteMarkers();
+        arr.forEach(this.addMarker);
+        this.mapMarkers.forEach(l => l.setMap(this.map));
+      }
+    },
   },
   methods: {
     mapInit() {
       this.map = new google.maps.Map(
         document.getElementById('map'), {
           zoom: 4,
-          center: this.locations[0].coords
+          center: this.locations[0].coords || { lat: 0, lng: 0 },
         }
       )
-      this.mapMarkers = this.locations.map(l => 
-        new google.maps.Marker({
-          position: l.coords,
-          map: this.map,
-        })
-      );
+      this.locations.forEach(this.addMarker);
+    },
+    addMarker({ coords }) {
+      const marker = new google.maps.Marker({
+        position: coords,
+        map: this.map,
+      });
+      this.mapMarkers.push(marker);
+    },
+    setMapOnAll(map) {
+      this.mapMarkers.forEach(m => m.setMap(map));
+    },
+    clearMarkers() {
+      this.setMapOnAll(null);
+    },
+    showMarkers() {
+      this.setMapOnAll(this.map);
+    },
+    deleteMarkers() {
+      this.clearMarkers();
+      this.mapMarkers = [];
     },
     async loadScript() {
       return new Promise((resolve, reject) => {
@@ -43,7 +66,7 @@ export default {
           return resolve(true);
         },
         document.body.appendChild(script)
-    });
+      });
     },
   },
   render(h) {

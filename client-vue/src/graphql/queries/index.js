@@ -3,13 +3,13 @@ import gql from 'graphql-tag';
 export const ALL_LOCATIONS_QUERY = gql`
   {
     locations {
-      id
-      name
-      description
-      coords {
-        lat
-        lng
-      }
+        id
+        name
+        description
+        coords {
+          lat
+          lng
+        }
     }
   }
 `;

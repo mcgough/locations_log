@@ -4,68 +4,14 @@ import { ADD_NEW_LOCATION } from './../graphql/mutations';
 import { ALL_LOCATIONS_QUERY } from './../graphql/queries';
 
 export default {
-  name: 'Sidebar',
+  name: 'sidebar',
   props: {
     title: String,
-  },
-  data() {
-    return {
-      showAddMenu: false,
-    };
-  },
-  methods: {
-    async handleAddNew(e) {
-      e.preventDefault();
-      const [name, description] = [...e.target];
-      const { data } = await this.$apollo.mutate({
-        mutation: ADD_NEW_LOCATION,
-        variables: {
-          name: name.value,
-          description: description.value,
-          coords: {
-            lat: 43.999,
-            lng: -123.434,
-          },
-        },
-        update: (store, { data: { addNewLocation } }) => {
-          const data = store.readQuery({ query: ALL_LOCATIONS_QUERY });
-          data.locations.push(addNewLocation);
-          store.writeQuery({
-            query: ALL_LOCATIONS_QUERY,
-            data,
-          });
-        },
-      });
-    },
-    genAddNewForm() {
-      return this.showAddMenu
-        ? <form 
-            onSubmit={(e) => this.handleAddNew(e)}
-            class={'add-new'}>
-            <input
-              type={'text'}
-              value={this.addNewName}
-              placeholder={'Name'}/>
-            <textarea
-              value={this.addNewDescription}
-              placeholder={'Description'} />
-            <button type={'submit'}>Add New</button>
-          </form>
-        : null;
-    },
   },
   render(h) {
     return (
       <div class={'sidebar'}>
         <div class={'title'}>{this.title}</div>
-        <div class={'menu'}>
-          <button
-            class={'show-add-new'}
-            onClick={() => this.showAddMenu = !this.showAddMenu}>
-            Add Location
-          </button>
-          {this.genAddNewForm()}
-        </div>
         { this.$slots.default }
       </div>
     );
