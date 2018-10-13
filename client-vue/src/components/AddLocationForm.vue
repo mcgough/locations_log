@@ -1,22 +1,17 @@
 <script>
 export default {
   name: 'add-location-form',
-  computed: {
-    formData() {
-      return {
-        name: this.$refs.name.value,
-        description: this.$refs.description.value,
-        coords: {
-          lat: 43.999,
-          lng: -123.434,
-        }
-      }
-    }
-  },
   methods: {
     handleSubmit(e) {
       e.preventDefault();
-      this.$emit('submit', this.formData);
+      this.$emit(
+        'submit',
+        Object.keys(this.$refs)
+          .reduce((acc, prop) => { 
+            acc[prop] = this.$refs[prop].value;
+            return acc;
+          }, {})
+      );
     }
   },
   render() {
@@ -33,6 +28,7 @@ export default {
           ref="description"
           value={this.addNewDescription}
           placeholder={'Description'} />
+        <slot></slot>
         <button type={'submit'}>Add New</button>
       </form>
     )
@@ -43,5 +39,11 @@ export default {
 <style scoped>
 .add-new > * {
   margin-bottom: .5rem;
+}
+form.add-new {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
 }
 </style>

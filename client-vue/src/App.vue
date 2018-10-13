@@ -58,8 +58,14 @@ export default {
         },
       })
     },
-    async handleAddNew(variables) {
-      const { data } = await this.$apollo.mutate({
+    async addLocation(variables) {
+      Object.assign(variables, {
+        coords: {
+          lat: 46,
+          lng: -113.342,
+        },
+      })
+      await this.$apollo.mutate({
         mutation: ADD_LOCATION,
         variables,
         update: (store, { data: { addLocation } }) => {
@@ -95,7 +101,9 @@ export default {
     },
     $addNewForm() {
       return this.showAddMenu
-        ? <AddLocationForm onSubmit={this.handleAddNew}/>
+        ? <AddLocationForm onSubmit={this.addLocation}>
+
+          </AddLocationForm>
         : null;
     }
   },
@@ -139,5 +147,14 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+.menu {
+  border: 1px solid;
+  border-right: none;
+  border-left: none;
+  padding: .75rem 0;
+}
+button.show-add-new {
+  margin: 1rem;
 }
 </style>
