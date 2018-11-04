@@ -75,6 +75,7 @@ export default {
     },
     async addLocation(variables) {
       const { images } = variables;
+      variables.files = [...images];
       Object.assign(variables, {
         coords: {
           lat: 46,
@@ -85,10 +86,10 @@ export default {
         variables,
         mutation: ADD_LOCATION,
         update: async (store, { data: { addLocation } }) => {
-          await this.$apollo.mutate({
-            mutation: MULTIPLE_UPLOAD,
-            variables: { images, id: addLocation.id },
-          });
+          // await this.$apollo.mutate({
+          //   mutation: MULTIPLE_UPLOAD,
+          //   variables: { images, id: addLocation.id },
+          // });
           const data = store.readQuery({ query: ALL_LOCATIONS_QUERY });
           if (!data.locations) {
             data.locations = [];

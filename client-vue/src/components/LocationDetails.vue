@@ -1,12 +1,24 @@
 <script>
+import CLImage from './CLImage';
+
 export default {
   name: 'location-details',
   props: {
     location: { type: Object, default: () => {}},
   },
+  methods: {
+    $images() {
+      return this.location.images.map(id => {
+        return (
+          <CLImage public_id={id} lazyLoad />
+        );
+      });
+    },
+  },
   render(h) {
     return (
       <div>
+        {this.$images()};
         <textarea ref="description" value={this.location.description} />
         <div>
           <button

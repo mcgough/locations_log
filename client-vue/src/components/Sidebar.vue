@@ -27,6 +27,7 @@ export default {
   max-width: 600px;
   border-right: 1px solid;
   background: #fff;
+  overflow-y: scroll;
 }
 .title {
   font-size: 3em;

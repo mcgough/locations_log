@@ -5,11 +5,13 @@ export const ADD_LOCATION = gql`
     $name: String!,
     $description: String,
     $coords: CoordsInput,
+    $files: [Upload]
   ) {
     addLocation(
       name: $name,
       description: $description,
-      coords: $coords
+      coords: $coords,
+      files: $files
     ) {
       id
       name
@@ -18,6 +20,7 @@ export const ADD_LOCATION = gql`
         lat
         lng
       }
+      images
     }
   }
 `;

@@ -17,7 +17,8 @@ const Mutations = `
     addLocation(
       name: String,
       description: String,
-      coords: CoordsInput
+      coords: CoordsInput,
+      files: [Upload]
     ): Location
     removeLocation(
       id: String!

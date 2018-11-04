@@ -1,7 +1,7 @@
 const Location = require('../../models/Location');
 const Coordinates = require('../../models/Coordinates');
 const { GraphQLUpload } = require('graphql-upload');
-const { stringifyID, uploadImg } = require('../../utils');
+const { stringifyID, uploadImg, destroyImg } = require('../../utils');
 const { ObjectId } = require('mongoose').Types;
 
 const locations = async () => {
@@ -16,11 +16,14 @@ const updateLocation = async ({ id, description }) => {
   const result = await Location.updateOne({ _id: ObjectId(id), description });
   return stringifyID(result);
 };
-const addLocation = async (location) => {
-  const result = await Location.create(location);
-  return stringifyID(result);
+const addLocation = async (variables) => {
+  variables.images = await Promise.all(variables.files.map(uploadImg));
+  const location = await Location.create(variables);
+  return stringifyID(location);
 };
 const removeLocation = async ({ id }) => {
+  const { images } = await Location.findById(Object(id));
+  await Promise.all(images.map(destroyImg));
   const result = await Location.findByIdAndRemove({ _id: ObjectId(id) });
   return result;
 };

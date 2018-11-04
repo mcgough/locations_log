@@ -28,5 +28,12 @@ module.exports = {
         resolve(public_id);
       });
     });
-  }
+  },
+  destroyImg: (id) => {
+    return new Promise((resolve, reject) => {
+      cloudinary.uploader.destroy(id, () => {
+        resolve()
+      });
+    })
+  },
 };
