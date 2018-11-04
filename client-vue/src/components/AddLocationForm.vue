@@ -16,6 +16,13 @@ export default {
             return acc;
           }, {})
       );
+      this.clearFields();
+    },
+    clearFields() {
+      Object.keys(this.$refs)
+        .forEach(prop => {
+          this.$refs[prop].value = '';
+        });
     },
   },
   render(h) {
@@ -26,11 +33,9 @@ export default {
         <input
           ref="name"
           type={'text'}
-          value={this.addNewName}
           placeholder={'Name'}/>
         <textarea
           ref="description"
-          value={this.addNewDescription}
           placeholder={'Description'} />
         <input
           onChange={(e) => this.$emit('imagesAdded', e)}

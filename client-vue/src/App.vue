@@ -100,6 +100,7 @@ export default {
             query: ALL_LOCATIONS_QUERY,
           });
           this.showAddMenu = false;
+          this.previewImages = [];
         },
       });
     },
