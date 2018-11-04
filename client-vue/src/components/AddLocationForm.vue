@@ -7,14 +7,18 @@ export default {
       this.$emit(
         'submit',
         Object.keys(this.$refs)
-          .reduce((acc, prop) => { 
-            acc[prop] = this.$refs[prop].value;
+          .reduce((acc, prop) => {
+            if (prop === 'images') {
+              acc[prop] = this.$refs[prop].files;
+            } else {
+              acc[prop] = this.$refs[prop].value;
+            }
             return acc;
           }, {})
       );
-    }
+    },
   },
-  render() {
+  render(h) {
     return (
       <form 
         onSubmit={(e) => this.handleSubmit(e)}
@@ -28,7 +32,13 @@ export default {
           ref="description"
           value={this.addNewDescription}
           placeholder={'Description'} />
-        <slot></slot>
+        <input
+          onChange={(e) => this.$emit('imagesAdded', e)}
+          ref="images"
+          type="file"
+          accept=".jpg, .jpeg, .png"
+          multiple />
+        {this.$slots.default}
         <button type={'submit'}>Add New</button>
       </form>
     )

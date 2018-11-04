@@ -1,6 +1,7 @@
 <script>
 import Sidebar from './components/Sidebar';
 import AddLocationForm from './components/AddLocationForm';
+import ImagePreview from './components/ImagePreview';
 import Location from './components/Location';
 import LocationDetails from './components/LocationDetails';
 import Map from './components/Map';
@@ -10,6 +11,7 @@ import {
   UPDATE_LOCATION,
   ADD_LOCATION,
   REMOVE_LOCATION,
+  MULTIPLE_UPLOAD,
 } from './graphql/mutations';
 
 export default {
@@ -21,6 +23,16 @@ export default {
     LocationDetails,
   },
   methods: {
+    handleAddNewClick() {
+      this.showAddMenu = !this.showAddMenu;
+      if (this.showAddMenu) {
+        return this.$refs.Map.addClickEvent();
+      }
+      this.$refs.Map.removeClickEvent()
+    },
+    updateImagePreview(e) {
+      this.previewImages = [...e.target.files];
+    },
     handleItemClick(id) {
       this.locations = this.locations.map(l => {
         const showDetails = l.showDetails
@@ -28,6 +40,9 @@ export default {
           : id === l.id
             ? true
             : false;
+        if (l.id === id) {
+          this.$refs.Map.goToLocation(l);
+        }
         return Object.assign(l, { showDetails });
       });
     },
@@ -59,6 +74,7 @@ export default {
       })
     },
     async addLocation(variables) {
+      const { images } = variables;
       Object.assign(variables, {
         coords: {
           lat: 46,
@@ -66,20 +82,28 @@ export default {
         },
       })
       await this.$apollo.mutate({
-        mutation: ADD_LOCATION,
         variables,
-        update: (store, { data: { addLocation } }) => {
+        mutation: ADD_LOCATION,
+        update: async (store, { data: { addLocation } }) => {
+          await this.$apollo.mutate({
+            mutation: MULTIPLE_UPLOAD,
+            variables: { images, id: addLocation.id },
+          });
           const data = store.readQuery({ query: ALL_LOCATIONS_QUERY });
+          if (!data.locations) {
+            data.locations = [];
+          }
           data.locations.push(addLocation);
           store.writeQuery({
-            query: ALL_LOCATIONS_QUERY,
             data,
+            query: ALL_LOCATIONS_QUERY,
           });
           this.showAddMenu = false;
         },
       });
     },
     $locations() {
+      if (!this.locations || !this.locations.length) return null;
       return this.locations.map((l) => {
         return (
           <Location
@@ -101,16 +125,25 @@ export default {
     },
     $addNewForm() {
       return this.showAddMenu
-        ? <AddLocationForm onSubmit={this.addLocation}>
-
+        ? <AddLocationForm
+            onSubmit={this.addLocation}
+            onImagesAdded={this.updateImagePreview}>
+            <ImagePreview imgs={this.previewImages} />
           </AddLocationForm>
         : null;
-    }
+    },
+    $appLoading() {
+      return this.appLoading
+        ? <div>Loading... </div>
+        : null;
+    },
   },
   data() {
     return {
       locations: [],
       showAddMenu: false,
+      appLoading: true,
+      previewImages: [],
     };
   },
   apollo: {
@@ -125,14 +158,14 @@ export default {
           <div class={'menu'}>
             <button
               class={'show-add-new'}
-              onClick={() => this.showAddMenu = !this.showAddMenu}>
+              onClick={this.handleAddNewClick}>
               Add Location
             </button>
             {this.$addNewForm()}
           </div>
           {this.$locations()}
         </Sidebar>
-        <Map locations={this.locations} />
+        <Map ref="Map" locations={this.locations} />
       </div>
     );
   },

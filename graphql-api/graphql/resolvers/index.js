@@ -1,38 +1,59 @@
-const data = require('../../dummyData');
-const fakeDB = {
-  locations: [...data.locations],
+const Location = require('../../models/Location');
+const Coordinates = require('../../models/Coordinates');
+const { GraphQLUpload } = require('graphql-upload');
+const { stringifyID, uploadImg } = require('../../utils');
+const { ObjectId } = require('mongoose').Types;
+
+const locations = async () => {
+  const result = await Location.find({});
+  return result.map(stringifyID);
+};
+const location = async ({ id }) => {
+  const result = await Location.findById(ObjectId(id));
+  return stringifyID(result); 
+}
+const updateLocation = async ({ id, description }) => {
+  const result = await Location.updateOne({ _id: ObjectId(id), description });
+  return stringifyID(result);
+};
+const addLocation = async (location) => {
+  const result = await Location.create(location);
+  return stringifyID(result);
+};
+const removeLocation = async ({ id }) => {
+  const result = await Location.findByIdAndRemove({ _id: ObjectId(id) });
+  return result;
+};
+
+const singleUpload = (obj, { file }) => console.log('SINGLE UPLOAD', obj, file);
+const multipleUpload = async (parent, { body }) => {
+  const { images, id } = body.variables;
+  try {
+    const imageIds = await Promise.all(images.map(uploadImg));
+    const result = await Location.findByIdAndUpdate(
+      ObjectId(id),
+      { images: imageIds },
+      { new: true },
+    );
+    return stringifyID(result);
+  }
+  catch(e) {
+    console.log('err', e);
+  }
 }
 
-const locations = () => fakeDB.locations;
-const location = args => fakeDB.locations.filter(l => l.id === args.id)[0];
-const updateLocation = ({ id, description }) => {
-  return fakeDB.locations
-    .map(l => {
-      if (l.id === id) {
-        l.description = description;
-      }
-      return l;
-    })
-    .filter(l => l.id === id)[0];
-};
-const addLocation = (location) => {
-  fakeDB.locations.push(Object.assign(location, {
-    id: fakeDB.locations.length + 1,
-  }));
-  return fakeDB.locations[fakeDB.locations.length - 1];
-};
-const removeLocation = ({ id }) => {
-  const [removed] = fakeDB.locations.filter(l => l.id === id);
-  fakeDB.locations = fakeDB.locations.filter(l => l.id !== id);
-  return removed;
-};
+const uploads = () => console.log('UPLOADS query'); 
 
 const resolvers = {
+  Upload: GraphQLUpload,
   location,
   locations,
+  uploads,
   updateLocation,
   addLocation,
   removeLocation,
+  singleUpload,
+  multipleUpload,
 };
 
 module.exports = resolvers;

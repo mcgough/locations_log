@@ -9,6 +9,7 @@ export default gql`
       lat
       lng
     }
+    images
   }
 `;
 

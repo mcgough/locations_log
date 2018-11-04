@@ -13,6 +13,7 @@
     "apollo-link": "^1.2.3",
     "apollo-link-context": "^1.0.9",
     "apollo-link-http": "^1.5.5",
+    "apollo-upload-client": "^8.0.0",
     "graphql": "^14.0.2",
     "graphql-tag": "^2.10.0",
     "vue": "^2.5.17",
