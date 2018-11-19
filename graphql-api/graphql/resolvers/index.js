@@ -30,11 +30,11 @@ const removeLocation = async ({ id }) => {
 
 const singleUpload = (obj, { file }) => console.log('SINGLE UPLOAD', obj, file);
 const multipleUpload = async (parent, { body }) => {
-  const { images, id } = body.variables;
+  const { id, files } = body.variables;
   try {
-    const imageIds = await Promise.all(images.map(uploadImg));
-    const result = await Location.findByIdAndUpdate(
-      ObjectId(id),
+    const imageIds = await Promise.all(files.map(uploadImg));
+    const result = await Location.findOneAndUpdate(
+      { _id: ObjectId(id)},
       { images: imageIds },
       { new: true },
     );

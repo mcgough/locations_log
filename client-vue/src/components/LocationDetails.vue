@@ -8,14 +8,13 @@ export default {
   },
   methods: {
     $images() {
-      return this.location.images.map(id => {
-        return (
+      return this.location.images.map(id => (
           <CLImage public_id={id} lazyLoad />
-        );
-      });
+        )
+      );
     },
   },
-  render(h) {
+  render() {
     return (
       <div>
         {this.$images()};

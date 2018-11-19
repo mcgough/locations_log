@@ -16,7 +16,7 @@ export const ALL_LOCATIONS_QUERY = gql`
 `;
 
 export const LOCATION_QUERY = gql`
-  query Location($id: String) {
+  query Location($id: String!) {
     location(id: $id) {
       id
       name

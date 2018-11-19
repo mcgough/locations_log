@@ -33,7 +33,7 @@ export default {
         document.getElementById('map'), {
           zoom: 4,
           center: this.locations.length
-            ? this.locations.coords
+            ? this.locations[0].coords
             : { lat: 0, lng: 0 },
         }
       )
@@ -77,14 +77,12 @@ export default {
     removeClickEvent() {
       google.maps.event.clearListeners(this.map, 'click');
     },
-    async loadScript() {
+    loadScript() {
       return new Promise((resolve, reject) => {
         const scripts = document.querySelector('script[title="Google Map"]');
-        console.log(scripts);
-        if (scripts && scripts.length) resolve(true);
+        if (scripts) return resolve(true);
         const script = document.createElement("script");
         window.mapLoaded = () => {
-          console.log('map script loaded');
           return resolve(true);
         }
         script.async = true;
@@ -95,7 +93,7 @@ export default {
       });
     },
   },
-  render(h) {
+  render() {
     return (
       <div id={'map'}></div>
     );
@@ -105,10 +103,11 @@ export default {
 
 <style scoped>
   #map {
-    position: absolute;
+    /*position: absolute;
     top: 0;
-    left: 0;
-    height: 100vh;
-    width: 100vw;
+    left: 0;*/
+    flex-grow: 1;
+    height: 100%;
+    width: 100%;
   }
 </style>

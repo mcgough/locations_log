@@ -18,10 +18,6 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .sidebar {
-  z-index: 1000;
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 30%;
   height: 100vh;
   max-width: 600px;

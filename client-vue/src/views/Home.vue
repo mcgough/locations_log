@@ -25,10 +25,10 @@ export default {
   methods: {
     handleAddNewClick() {
       this.showAddMenu = !this.showAddMenu;
-      if (this.showAddMenu) {
-        return this.$refs.Map.addClickEvent();
-      }
-      this.$refs.Map.removeClickEvent()
+      // if (this.showAddMenu) {
+      //   return this.$refs.Map.addClickEvent();
+      // }
+      // this.$refs.Map.removeClickEvent()
     },
     updateImagePreview(e) {
       this.previewImages = [...e.target.files];
@@ -65,13 +65,13 @@ export default {
       await this.$apollo.mutate({
         mutation: REMOVE_LOCATION,
         variables: { id },
-        update: (store, { data: { removeLocation }}) => {
+        update: (store, { data: { removeLocation } }) => {
           const query = ALL_LOCATIONS_QUERY;
           const data = store.readQuery({ query });
           data.locations = data.locations.filter(l => l.id !== id);
           store.writeQuery({ query, data });
         },
-      })
+      });
     },
     async addLocation(variables) {
       const { images } = variables;
@@ -81,7 +81,7 @@ export default {
           lat: 46,
           lng: -113.342,
         },
-      })
+      });
       await this.$apollo.mutate({
         variables,
         mutation: ADD_LOCATION,
@@ -102,8 +102,7 @@ export default {
     },
     $locations() {
       if (!this.locations || !this.locations.length) return null;
-      return this.locations.map((l) => {
-        return (
+      return this.locations.map((l) => (
           <Location
             key={l.id}
             location={l}
@@ -119,7 +118,7 @@ export default {
             }
           </Location>
         )
-      });
+      );
     },
     $addNewForm() {
       return this.showAddMenu
@@ -149,11 +148,10 @@ export default {
       query: ALL_LOCATIONS_QUERY,
     },
   },
-  render(h) {
+  render() {
     return (
       <div id="app">
         <Sidebar title={'Locations'}>
-          <router-link to="about">About</router-link>
           <div class={'menu'}>
             <button
               class={'show-add-new'}
@@ -164,9 +162,6 @@ export default {
           </div>
           {this.$locations()}
         </Sidebar>
-        <keep-alive>
-          <Map ref="Map" locations={this.locations} />
-        </keep-alive>
       </div>
     );
   },
@@ -180,7 +175,12 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 .menu {
   border: 1px solid;
