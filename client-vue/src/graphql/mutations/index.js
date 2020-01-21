@@ -1,16 +1,16 @@
-import gql from 'graphql-tag';
+import gql from "graphql-tag";
 
 export const ADD_LOCATION = gql`
   mutation addLocation(
-    $name: String!,
-    $description: String,
-    $coords: CoordsInput,
+    $name: String!
+    $description: String
+    $coords: CoordsInput
     $files: [Upload]
   ) {
     addLocation(
-      name: $name,
-      description: $description,
-      coords: $coords,
+      name: $name
+      description: $description
+      coords: $coords
       files: $files
     ) {
       id

@@ -1,17 +1,17 @@
 <script>
 export default {
-  name: 'sidebar',
+  name: "sidebar",
   props: {
-    title: String,
+    title: String
   },
   render(h) {
     return (
-      <div class={'sidebar'}>
-        <div class={'title'}>{this.title}</div>
-        { this.$slots.default }
+      <div class={"sidebar"}>
+        <div class={"title"}>{this.title}</div>
+        {this.$slots.default}
       </div>
     );
-  },
+  }
 };
 </script>
 

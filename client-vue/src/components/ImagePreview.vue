@@ -1,27 +1,19 @@
 <script>
 export default {
-  name: 'image-preview',
-  props: ['imgs'],
+  name: "image-preview",
+  props: ["imgs"],
   methods: {
     buildImgTile(imgData) {
       return (
-        <img
-          class={'tile-preview'}
-          src={window.URL.createObjectURL(imgData)} />
-      )
-    },
+        <img class={"tile-preview"} src={window.URL.createObjectURL(imgData)} />
+      );
+    }
   },
   render(h) {
-    const tiles = this.imgs.length
-      ? this.imgs.map(this.buildImgTile)
-      : null;
-    return (
-      <div class={'image-preview-wrapper'}>
-        {tiles}
-      </div>
-    );
+    const tiles = this.imgs.length ? this.imgs.map(this.buildImgTile) : null;
+    return <div class={"image-preview-wrapper"}>{tiles}</div>;
   }
-}
+};
 </script>
 
 <style scoped>

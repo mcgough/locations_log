@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const LocationSchema = new Schema({
@@ -6,9 +6,9 @@ const LocationSchema = new Schema({
   description: { type: String },
   coords: {
     lat: { type: Number },
-    lng: { type: Number },
+    lng: { type: Number }
   },
-  images: [String],
+  images: [String]
 });
 
-module.exports = mongoose.model('Location', LocationSchema);
+module.exports = mongoose.model("Location", LocationSchema);

@@ -1,11 +1,11 @@
-require('dotenv').config()
-const cors = require('cors');
-const express = require('express');
-const express_graphql = require('express-graphql');
-const { graphqlUploadExpress } = require('graphql-upload');
-const graphqlSchema = require('./graphql/schema');
-const graphqlResolvers = require('./graphql/resolvers');
-const mongoose = require('mongoose');
+require("dotenv").config();
+const cors = require("cors");
+const express = require("express");
+const express_graphql = require("express-graphql");
+const { graphqlUploadExpress } = require("graphql-upload");
+const graphqlSchema = require("./graphql/schema");
+const graphqlResolvers = require("./graphql/resolvers");
+const mongoose = require("mongoose");
 
 const app = express();
 
@@ -18,22 +18,20 @@ mongoose.Promise = global.Promise;
 
 const db = mongoose.connection;
 
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 app.use(cors());
 
-app.use('*',
+app.use(
+  "*",
   graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }),
   express_graphql({
     schema: graphqlSchema,
     rootValue: graphqlResolvers,
     graphiql: true
-  }),
+  })
 );
 
 app.listen(4000, () => {
-  console.log('Running at port 4000');
+  console.log("Running at port 4000");
 });
-
-
-

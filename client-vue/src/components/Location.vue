@@ -1,34 +1,33 @@
 <script>
 export default {
-  name: 'location',
+  name: "location",
   computed: {
     route() {
       return {
-        name: 'location',
+        name: "location",
         params: {
           name: this.location.name.toLowerCase(),
           id: this.location.id
-        },
+        }
       };
     }
   },
   props: {
-    location: { type: Object, default: () => {}},
+    location: { type: Object, default: () => {} }
   },
   render() {
     return (
-      <div class={'location'}>
+      <div class={"location"}>
         <router-link to={this.route}>
-          <div class={'name'}>
-            {this.location.name}
-          </div>
+          <div class={"name"}>{this.location.name}</div>
         </router-link>
-        <div class={'remove'}
-          onClick={() => this.$emit('remove')}>X</div>
-        {this.$slots.default} 
+        <div class={"remove"} onClick={() => this.$emit("remove")}>
+          X
+        </div>
+        {this.$slots.default}
       </div>
     );
-  },
+  }
 };
 </script>
 

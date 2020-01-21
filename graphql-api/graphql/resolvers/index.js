@@ -1,8 +1,8 @@
-const Location = require('../../models/Location');
-const Coordinates = require('../../models/Coordinates');
-const { GraphQLUpload } = require('graphql-upload');
-const { stringifyID, uploadImg, destroyImg } = require('../../utils');
-const { ObjectId } = require('mongoose').Types;
+const Location = require("../../models/Location");
+const Coordinates = require("../../models/Coordinates");
+const { GraphQLUpload } = require("graphql-upload");
+const { stringifyID, uploadImg, destroyImg } = require("../../utils");
+const { ObjectId } = require("mongoose").Types;
 
 const locations = async () => {
   const result = await Location.find({});
@@ -10,13 +10,13 @@ const locations = async () => {
 };
 const location = async ({ id }) => {
   const result = await Location.findById(ObjectId(id));
-  return stringifyID(result); 
-}
+  return stringifyID(result);
+};
 const updateLocation = async ({ id, description }) => {
   const result = await Location.updateOne({ _id: ObjectId(id), description });
   return stringifyID(result);
 };
-const addLocation = async (variables) => {
+const addLocation = async variables => {
   variables.images = await Promise.all(variables.files.map(uploadImg));
   const location = await Location.create(variables);
   return stringifyID(location);
@@ -28,24 +28,23 @@ const removeLocation = async ({ id }) => {
   return result;
 };
 
-const singleUpload = (obj, { file }) => console.log('SINGLE UPLOAD', obj, file);
+const singleUpload = (obj, { file }) => console.log("SINGLE UPLOAD", obj, file);
 const multipleUpload = async (parent, { body }) => {
   const { id, files } = body.variables;
   try {
     const imageIds = await Promise.all(files.map(uploadImg));
     const result = await Location.findOneAndUpdate(
-      { _id: ObjectId(id)},
+      { _id: ObjectId(id) },
       { images: imageIds },
-      { new: true },
+      { new: true }
     );
     return stringifyID(result);
+  } catch (e) {
+    console.log("err", e);
   }
-  catch(e) {
-    console.log('err', e);
-  }
-}
+};
 
-const uploads = () => console.log('UPLOADS query'); 
+const uploads = () => console.log("UPLOADS query");
 
 const resolvers = {
   Upload: GraphQLUpload,
@@ -56,7 +55,7 @@ const resolvers = {
   addLocation,
   removeLocation,
   singleUpload,
-  multipleUpload,
+  multipleUpload
 };
 
 module.exports = resolvers;

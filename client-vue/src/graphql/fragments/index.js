@@ -1,4 +1,4 @@
-import gql from 'graphql-tag';
+import gql from "graphql-tag";
 
 export default gql`
   fragment LocationFragment on Location {
@@ -12,4 +12,3 @@ export default gql`
     images
   }
 `;
-

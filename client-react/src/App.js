@@ -1,19 +1,19 @@
-import React, { Component } from 'react';
-import ApolloClient from 'apollo-boost';
-import { ApolloProvider } from 'react-apollo';
+import React, { Component } from "react";
+import ApolloClient from "apollo-boost";
+import { ApolloProvider } from "react-apollo";
 
-import Locations from './components/Locations';
+import Locations from "./components/Locations";
 
-import './App.css';
+import "./App.css";
 
 const client = new ApolloClient({
-  uri: 'http://localhost:4000/',
+  uri: "http://localhost:4000/"
 });
 
 class App extends Component {
   render() {
     return (
-      <ApolloProvider client={ client }>
+      <ApolloProvider client={client}>
         <div>
           <h1>Locations Apollo App</h1>
           <Locations />

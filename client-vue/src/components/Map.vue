@@ -1,17 +1,17 @@
 <script>
-import GoogleMapsKey from './../keys';
+import GoogleMapsKey from "./../keys";
 
 export default {
-  name: 'google-map',
+  name: "google-map",
   components: {},
   props: {
-    locations: { type: Array, default: () => [{ coords: { lat: 0, lng: 0 }}] },
+    locations: { type: Array, default: () => [{ coords: { lat: 0, lng: 0 } }] }
   },
   data() {
     return {
       map: null,
-      mapMarkers: [],
-    }
+      mapMarkers: []
+    };
   },
   async mounted() {
     await this.loadScript();
@@ -25,18 +25,16 @@ export default {
         arr.forEach(this.addMarker);
         this.mapMarkers.forEach(l => l.setMap(this.map));
       }
-    },
+    }
   },
   methods: {
     mapInit() {
-      this.map = new google.maps.Map(
-        document.getElementById('map'), {
-          zoom: 4,
-          center: this.locations.length
-            ? this.locations[0].coords
-            : { lat: 0, lng: 0 },
-        }
-      )
+      this.map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 4,
+        center: this.locations.length
+          ? this.locations[0].coords
+          : { lat: 0, lng: 0 }
+      });
       if (this.locations) {
         this.locations.forEach(this.addMarker);
       }
@@ -44,7 +42,7 @@ export default {
     addMarker({ coords }) {
       const marker = new google.maps.Marker({
         position: coords,
-        map: this.map,
+        map: this.map
       });
       this.mapMarkers.push(marker);
     },
@@ -66,16 +64,16 @@ export default {
       this.map.setZoom(8);
     },
     addClickEvent() {
-      this.map.addListener('click', (e) => {
+      this.map.addListener("click", e => {
         const coords = {
           lat: e.latLng.lat(),
-          lng: e.latLng.lng(),
+          lng: e.latLng.lng()
         };
         console.log(coords);
       });
     },
     removeClickEvent() {
-      google.maps.event.clearListeners(this.map, 'click');
+      google.maps.event.clearListeners(this.map, "click");
     },
     loadScript() {
       return new Promise((resolve, reject) => {
@@ -84,30 +82,28 @@ export default {
         const script = document.createElement("script");
         window.mapLoaded = () => {
           return resolve(true);
-        }
+        };
         script.async = true;
         script.defer = true;
-        script.title = 'Google Map'
+        script.title = "Google Map";
         script.src = `https://maps.googleapis.com/maps/api/js?key=${GoogleMapsKey}&callback=mapLoaded`;
-        document.body.appendChild(script)
+        document.body.appendChild(script);
       });
-    },
+    }
   },
   render() {
-    return (
-      <div id={'map'}></div>
-    );
+    return <div id={"map"}></div>;
   }
-}
+};
 </script>
 
 <style scoped>
-  #map {
-    /*position: absolute;
+#map {
+  /*position: absolute;
     top: 0;
     left: 0;*/
-    flex-grow: 1;
-    height: 100%;
-    width: 100%;
-  }
+  flex-grow: 1;
+  height: 100%;
+  width: 100%;
+}
 </style>
